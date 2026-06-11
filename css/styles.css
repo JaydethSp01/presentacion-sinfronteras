@@ -461,6 +461,33 @@ body{
 .legal li{font-size:clamp(12.5px,1.5vw,15px);line-height:1.5;padding-left:18px;position:relative}
 .legal li::before{content:"—";position:absolute;left:0;color:var(--orange)}
 
+/* variante legal sobre papel (tendencias y canales) */
+.s-paper .legal{border:2px solid var(--ink);background:rgba(255,255,255,.5)}
+.s-paper .legal h3{color:var(--red)}
+.s-paper .legal li::before{color:var(--red)}
+.legal-3{grid-template-columns:repeat(3,1fr)}
+@media (max-width:1020px){.legal-3{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.legal-3{grid-template-columns:1fr}}
+
+/* ══════════ ADAPTACIÓN DEL SERVICIO ══════════ */
+.adapt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(10px,1.6vw,18px);max-width:1240px}
+.adapt{
+  border:1px solid var(--line-d);padding:clamp(12px,1.8vw,20px);
+  background:rgba(255,255,255,.035);display:flex;flex-direction:column;gap:7px;
+  transition:border-color .3s;
+}
+.adapt:hover{border-color:var(--orange)}
+.adapt h3{font-family:var(--font-display);text-transform:uppercase;font-weight:800;font-size:clamp(15px,1.9vw,20px);letter-spacing:.04em}
+.adapt p{font-size:clamp(11.5px,1.3vw,13.5px);line-height:1.5;opacity:.88}
+.adapt-b{
+  align-self:flex-start;font-size:clamp(9px,1.1vw,10.5px);letter-spacing:.16em;font-weight:600;
+  padding:4px 10px;
+}
+.b-si{background:var(--orange);color:var(--ink)}
+.b-no{border:1.5px solid var(--cream);color:var(--cream);opacity:.85}
+.b-par{border:1.5px dashed var(--orange);color:var(--orange)}
+@media (max-width:560px){.adapt-grid{grid-template-columns:1fr 1fr}.adapt p{font-size:10.5px}.adapt h3{font-size:13px}}
+
 /* ══════════ 12 RECOMENDACIONES ══════════ */
 .rec-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:clamp(8px,1.4vw,16px);counter-reset:rec}
 @media (max-width:880px){.rec-list{grid-template-columns:1fr;gap:8px}}
