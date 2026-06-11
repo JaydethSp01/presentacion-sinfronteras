@@ -155,8 +155,12 @@ body{
   opacity:.95;pointer-events:none;
 }
 .cover-route svg{width:100%;height:100%}
-.route-line{animation:dashmove 1.1s linear infinite}
-@keyframes dashmove{to{stroke-dashoffset:-17}}
+/* la ruta se dibuja una vez, luego deriva lenta de guiones */
+.route-reveal{animation:drawRoute 2.4s cubic-bezier(.45,0,.25,1) .55s forwards}
+@keyframes drawRoute{to{stroke-dashoffset:0}}
+.route-dash{animation:dashDrift 5s linear 3.2s infinite}
+@keyframes dashDrift{to{stroke-dashoffset:-13}}
+.port-mia .port-pulse.p2{animation-delay:3.1s}
 .route-label{font-family:var(--font-mono);font-size:14px;fill:rgba(246,241,229,.8);letter-spacing:.18em;font-weight:500}
 .route-coord{font-family:var(--font-mono);font-size:10px;fill:rgba(246,241,229,.35);letter-spacing:.1em}
 .port-pulse{transform-box:fill-box;transform-origin:center;animation:portPulse 2.6s ease-out infinite}
