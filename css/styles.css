@@ -215,27 +215,79 @@ body{
 }
 @media (max-width:700px){.barcode{display:none}}
 
-/* ══════════ 02 MANIFEST ══════════ */
-.manifest{
-  border:2px solid var(--ink);background:rgba(255,255,255,.45);
-  max-width:980px;
+/* ══════════ 02 FICHA · BILL OF LADING ══════════ */
+.s-ficha{justify-content:center}
+.bol{
+  border:2.5px solid var(--ink);background:#FBF8F0;max-width:1060px;width:100%;
+  box-shadow:14px 14px 0 rgba(10,26,47,.16);position:relative;
 }
-.m-row{
-  display:grid;grid-template-columns:clamp(120px,22vw,230px) 1fr;
-  border-bottom:1px solid var(--line-p);
+.bol::before{
+  content:"";position:absolute;inset:6px;border:1px solid var(--line-p);pointer-events:none;
 }
-.m-row:last-child{border-bottom:none}
-.m-key{
-  padding:clamp(10px,1.8vh,16px) clamp(12px,2vw,22px);
-  font-size:clamp(9px,1.3vw,12px);letter-spacing:.14em;font-weight:600;
-  border-right:1px solid var(--line-p);display:flex;align-items:center;
-  background:rgba(10,26,47,.05);
+.bol-head{
+  display:flex;justify-content:space-between;align-items:flex-start;gap:14px;
+  padding:clamp(14px,2.2vw,24px) clamp(16px,2.6vw,30px);
+  border-bottom:2px solid var(--ink);
 }
-.m-val{padding:clamp(10px,1.8vh,16px) clamp(12px,2.2vw,24px);font-size:clamp(13px,1.8vw,17px);font-weight:500;line-height:1.45}
-@media (max-width:560px){
-  .m-row{grid-template-columns:1fr}
-  .m-key{border-right:none;border-bottom:1px dashed var(--line-p);padding-bottom:6px}
-  .m-val{padding-top:8px}
+.bol-brand{display:flex;flex-direction:column;gap:4px}
+.bol-brand b{
+  font-family:var(--font-display);font-weight:900;text-transform:uppercase;
+  font-size:clamp(22px,3.4vw,38px);line-height:.95;letter-spacing:.02em;
+}
+.bol-brand .mono{font-size:clamp(8px,1.1vw,10.5px);letter-spacing:.2em;color:var(--red);font-weight:500}
+.bol-code{font-size:clamp(8px,1.1vw,11px);letter-spacing:.12em;text-align:right;line-height:1.7;opacity:.75}
+.bol-names{
+  padding:clamp(16px,2.6vw,30px) clamp(16px,2.6vw,30px) clamp(12px,2vw,22px);
+  border-bottom:1px dashed var(--line-p);position:relative;
+}
+.bol-label{
+  font-size:clamp(8px,1.1vw,10.5px);letter-spacing:.22em;color:var(--red);font-weight:600;
+  display:block;margin-bottom:clamp(8px,1.4vh,14px);
+}
+.bol-names h2{
+  font-family:var(--font-display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(28px,5.2vw,58px);line-height:1.02;letter-spacing:.01em;
+}
+.bol-names h2 em{font-style:normal;color:transparent;-webkit-text-stroke:1.6px var(--ink)}
+.bol-names h2:hover em{color:var(--orange);-webkit-text-stroke:1.6px var(--orange);transition:.3s}
+.bol-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);
+}
+.bol-cell{
+  padding:clamp(10px,1.6vw,16px) clamp(16px,2.6vw,30px);
+  border-bottom:1px solid var(--line-p);display:flex;flex-direction:column;gap:3px;
+}
+.bol-cell:nth-child(odd){border-right:1px solid var(--line-p)}
+.bol-cell:nth-last-child(-n+2){border-bottom:none}
+.bol-cell .mono{font-size:clamp(7.5px,1vw,9.5px);letter-spacing:.18em;opacity:.55;font-weight:600}
+.bol-cell b{font-size:clamp(12px,1.6vw,16px);font-weight:600;line-height:1.35}
+.bol-arrow{font-style:normal;color:var(--red);font-weight:700}
+.bol-foot{
+  display:flex;align-items:center;gap:clamp(12px,2vw,22px);
+  padding:clamp(10px,1.6vw,16px) clamp(16px,2.6vw,30px);
+  border-top:2px solid var(--ink);background:rgba(10,26,47,.04);
+}
+.bol-foot .mono{font-size:clamp(7.5px,1vw,9.5px);letter-spacing:.18em;opacity:.6}
+.bol-barcode{
+  width:clamp(70px,9vw,120px);height:clamp(20px,3vh,30px);flex-shrink:0;
+  background:repeating-linear-gradient(90deg,
+    var(--ink) 0 2px, transparent 2px 5px,
+    var(--ink) 5px 9px, transparent 9px 11px,
+    var(--ink) 11px 12px, transparent 12px 16px,
+    var(--ink) 16px 22px, transparent 22px 24px);
+  opacity:.8;
+}
+.s-ficha .stamp{top:clamp(70px,11vh,110px)}
+@media (max-width:700px){
+  .bol-grid{grid-template-columns:1fr}
+  .bol-cell:nth-child(odd){border-right:none}
+  .bol-cell:nth-last-child(-n+2){border-bottom:1px solid var(--line-p)}
+  .bol-cell:last-child{border-bottom:none}
+  .bol-head{flex-direction:column;gap:8px}
+  .bol-code{text-align:left}
+  .bol-names h2{font-size:clamp(24px,8vw,34px)}
+  .s-ficha{justify-content:flex-start}
+  .s-ficha .stamp{top:auto}
 }
 
 /* ══════════ layouts compartidos ══════════ */
