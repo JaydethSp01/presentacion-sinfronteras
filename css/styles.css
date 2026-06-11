@@ -582,6 +582,57 @@ body{
 }
 @keyframes hint{0%,80%{opacity:.9}100%{opacity:0}}
 
+/* ══════════ wipe · escáner de aduana ══════════ */
+.wipe{
+  position:fixed;inset:-12%;z-index:65;pointer-events:none;
+  background:linear-gradient(102deg,
+    transparent 38%,
+    rgba(255,107,26,.18) 45%,
+    var(--orange) 49.6%, var(--orange) 50.4%,
+    rgba(215,38,61,.18) 55%,
+    transparent 62%);
+  transform:translateX(-140%);opacity:0;
+}
+.wipe.run{animation:wipeRun .62s cubic-bezier(.5,0,.2,1)}
+@keyframes wipeRun{
+  0%{transform:translateX(-140%);opacity:1}
+  100%{transform:translateX(140%);opacity:1}
+}
+
+/* ══════════ subrayado animado en títulos ══════════ */
+.h2 em{
+  background-image:linear-gradient(currentColor,currentColor);
+  background-repeat:no-repeat;background-position:0 94%;background-size:0% .075em;
+  transition:background-size .85s var(--ease) .85s;
+  padding-bottom:.04em;
+}
+.slide.active .h2 em{background-size:100% .075em}
+
+/* ══════════ tilt / autoplay ══════════ */
+.tiltable{will-change:transform}
+.nav-btn.on{background:var(--orange);border-color:var(--orange);color:var(--ink)}
+.nav-btn.on::after{
+  content:"";position:absolute;inset:-5px;border-radius:50%;
+  border:2px solid var(--orange);opacity:.6;animation:portPulse 1.6s ease-out infinite;
+}
+.nav-btn{position:relative}
+
+/* ══════════ impresión a PDF ══════════ */
+@media print{
+  .hud,.progress,.deck-nav,.overview-btn,.overview,.grain,.swipe-hint,.wipe{display:none!important}
+  body{overflow:visible}
+  .deck{position:static}
+  .slide{
+    position:relative;inset:auto;opacity:1!important;visibility:visible!important;
+    transform:none!important;page-break-after:always;break-after:page;
+    height:100vh;overflow:hidden;
+  }
+  .rv,.stamp{opacity:1!important;transform:none!important;animation:none!important}
+  .stamp{transform:rotate(8deg)!important}
+  .s-dark{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .s-paper{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+
 /* ══════════ reduced motion ══════════ */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}

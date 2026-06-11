@@ -54,11 +54,19 @@
   }
 
   /* ── navigation ── */
+  const wipe = document.getElementById('wipe');
   function go(i, instant = false) {
     if (i < 0 || i >= total || (i === cur && !instant)) return;
     if (animating && !instant) return;
     animating = true;
     setTimeout(() => { animating = false; }, 450);
+
+    if (!instant) {
+      wipe.classList.remove('run');
+      void wipe.offsetWidth;
+      wipe.classList.add('run');
+    }
+    resetAutoplayTimer();
 
     slides[cur].classList.remove('active');
     slides[cur].classList.toggle('prev', i > cur);
@@ -99,7 +107,79 @@
       case 'f': case 'F':
         document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.();
         break;
+      case 'a': case 'A': toggleAutoplay(); break;
     }
+  });
+
+  /* ── autoplay (botón ▶ o tecla A) ── */
+  const btnPlay = document.getElementById('btnPlay');
+  const AUTOPLAY_MS = 9000;
+  let playTimer = null;
+  function toggleAutoplay() { playTimer ? stopAutoplay() : startAutoplay(); }
+  function startAutoplay() {
+    btnPlay.classList.add('on');
+    btnPlay.textContent = '⏸';
+    playTimer = setInterval(() => {
+      if (cur >= total - 1) { stopAutoplay(); return; }
+      go(cur + 1);
+    }, AUTOPLAY_MS);
+  }
+  function stopAutoplay() {
+    clearInterval(playTimer); playTimer = null;
+    btnPlay.classList.remove('on');
+    btnPlay.textContent = '▶';
+  }
+  function resetAutoplayTimer() {
+    if (!playTimer) return;
+    clearInterval(playTimer);
+    playTimer = setInterval(() => {
+      if (cur >= total - 1) { stopAutoplay(); return; }
+      go(cur + 1);
+    }, AUTOPLAY_MS);
+  }
+  btnPlay.addEventListener('click', toggleAutoplay);
+
+  /* ── tilt 3D sutil en tarjetas (solo desktop) ── */
+  if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+    document.querySelectorAll('.zone,.why,.stat,.adapt,.crit,.lv').forEach(card => {
+      card.classList.add('tiltable');
+      let raf = null;
+      card.addEventListener('pointermove', e => {
+        if (raf) return;
+        raf = requestAnimationFrame(() => {
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - .5;
+          const y = (e.clientY - r.top) / r.height - .5;
+          card.style.transform = `perspective(700px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-4px)`;
+          raf = null;
+        });
+      });
+      card.addEventListener('pointerleave', () => {
+        cancelAnimationFrame(raf); raf = null;
+        card.style.transform = '';
+      });
+    });
+
+    /* ── parallax de portada ── */
+    const coverRoute = document.querySelector('.cover-route');
+    const coverTitle = document.querySelector('.cover-title');
+    document.querySelector('.s-cover').addEventListener('pointermove', e => {
+      const x = e.clientX / innerWidth - .5;
+      const y = e.clientY / innerHeight - .5;
+      coverRoute.style.transform = `translate(${x * -18}px, ${y * -12}px)`;
+      coverTitle.style.transform = `translate(${x * 8}px, ${y * 5}px)`;
+    });
+  }
+
+  /* ── impresión a PDF: renderizar todo en estado final ── */
+  window.addEventListener('beforeprint', () => {
+    stopAutoplay();
+    document.querySelectorAll('.bar[data-w]').forEach(b => { b.style.transition = 'none'; b.style.width = b.dataset.w + '%'; });
+    document.querySelectorAll('[data-count]').forEach(el => {
+      const t = parseFloat(el.dataset.count);
+      const dec = parseInt(el.dataset.dec || '0', 10);
+      el.textContent = dec ? t.toFixed(dec).replace('.', ',') : Math.round(t).toLocaleString('es-CO');
+    });
   });
 
   /* ── touch swipe (horizontal only, respects vertical scroll) ── */
