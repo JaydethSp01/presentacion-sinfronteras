@@ -54,18 +54,11 @@
   }
 
   /* ── navigation ── */
-  const wipe = document.getElementById('wipe');
   function go(i, instant = false) {
     if (i < 0 || i >= total || (i === cur && !instant)) return;
     if (animating && !instant) return;
     animating = true;
     setTimeout(() => { animating = false; }, 450);
-
-    if (!instant) {
-      wipe.classList.remove('run');
-      void wipe.offsetWidth;
-      wipe.classList.add('run');
-    }
     resetAutoplayTimer();
 
     slides[cur].classList.remove('active');
@@ -78,6 +71,9 @@
 
     fill.style.width = ((cur + 1) / total * 100) + '%';
     navCur.textContent = String(cur + 1).padStart(2, '0');
+    navCur.classList.remove('tick');
+    void navCur.offsetWidth;
+    navCur.classList.add('tick');
     document.body.classList.toggle('s-paper-active', s.classList.contains('s-paper'));
     ovItems.forEach((it, j) => it.classList.toggle('cur', j === cur));
     history.replaceState(null, '', '#' + (cur + 1));
@@ -217,6 +213,20 @@
   document.getElementById('btnOverview').addEventListener('click', () =>
     overview.classList.contains('open') ? closeOverview() : openOverview());
   overview.addEventListener('click', e => { if (e.target === overview) closeOverview(); });
+
+  /* ── título split-flap: letras de tablero de aeropuerto ── */
+  document.querySelectorAll('.cover-title .line').forEach((line, li) => {
+    const txt = line.textContent;
+    line.textContent = '';
+    [...txt].forEach((ch, i) => {
+      if (ch === ' ') { line.appendChild(document.createTextNode(' ')); return; }
+      const f = document.createElement('i');
+      f.className = 'flap';
+      f.textContent = ch;
+      f.style.animationDelay = (0.3 + li * 0.22 + i * 0.05) + 's';
+      line.appendChild(f);
+    });
+  });
 
   /* ── init from hash ── */
   const h = parseInt(location.hash.slice(1), 10);
